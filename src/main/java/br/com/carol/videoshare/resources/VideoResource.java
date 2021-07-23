@@ -33,7 +33,7 @@ public class VideoResource {
     }
 
     @GetMapping("/videos")
-    public ResponseEntity<List<Video>> findAllVideo() {
+    public ResponseEntity<List<Video>> findAllVideos() {
         List<Video> video = service.findAllVideos();
         return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
