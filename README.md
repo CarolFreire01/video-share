@@ -1,5 +1,5 @@
 
-# video-share-aluraflix
+# video-share
 
 This project is a challenge proposed by Alura through the #alurachallengeback
 
