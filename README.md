@@ -6,7 +6,6 @@ This project is a challenge proposed by Alura through the #alurachallengeback
 ![java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![Spring](https://img.shields.io/badge/Spring-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![postgres](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
-![linkedin](https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white?link=https://www.linkedin.com/in/carolina-freire-ap/)
 
 What's this?
 
@@ -97,6 +96,7 @@ Body
 ```
 ## Authors
 
+LinkedIn
 - [@carolina-freire-ap](https://www.linkedin.com/in/carolina-freire-ap/)
 
   
