@@ -95,7 +95,7 @@ public class VideoResourceTest {
         VideoServiceImpl service = Mockito.mock(VideoServiceImpl.class);
         when(service.findVideoById(video.getId())).thenReturn(Optional.of(video));
 
-        VideoDto expected = service.updateVideo(newVideo, video.getId());
+        service.updateVideo(newVideo, video.getId());
 
     }
 
