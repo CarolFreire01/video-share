@@ -29,6 +29,7 @@ import static org.mockito.Mockito.when;
 public class VideoResourceTest {
 
 
+
     @Test
     public void getAllVideosTest_Success(){
         List<Video> videoList = new ArrayList<>();
@@ -82,6 +83,20 @@ public class VideoResourceTest {
         VideoDto expected = service.addVideo(video);
 
         assertEquals(expected, video);
+    }
+
+    @Test
+    public void updateVideo_Success() {
+
+        VideoDto video = new VideoDto("Teste 1", "Video api teste", "www.teste.com");
+
+        VideoDto newVideo = new VideoDto("Teste 2", "Video api teste 2", "www.teste.com");
+
+        VideoServiceImpl service = Mockito.mock(VideoServiceImpl.class);
+        when(service.findVideoById(video.getId())).thenReturn(Optional.of(video));
+
+        VideoDto expected = service.updateVideo(newVideo, video.getId());
+
     }
 
 
