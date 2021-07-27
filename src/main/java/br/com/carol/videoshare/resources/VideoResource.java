@@ -19,13 +19,13 @@ public class VideoResource {
     @Autowired
     VideoServiceImpl service;
 
-    @PostMapping(path = "/video")
+    @PostMapping(path = "/videos")
     public ResponseEntity<VideoDto> createVideo(@RequestBody VideoDto requestDto) {
         VideoDto requestVideo = service.addVideo(requestDto);
         return Objects.nonNull(requestVideo) ? ResponseEntity.status(HttpStatus.CREATED).body(requestVideo) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @GetMapping("/video/{id}")
+    @GetMapping("/videos/{id}")
     public ResponseEntity<Optional<Video>> findVideo(@PathVariable("id") Long id) {
         Optional<Video> video = service.findVideoById(id);
         return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -38,13 +38,13 @@ public class VideoResource {
         return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping("/video/{id}")
+    @PutMapping("/videos/{id}")
     public ResponseEntity<VideoDto> updateVideo(@PathVariable("id") Long id, @RequestBody VideoDto responseDto) {
         VideoDto updateVideo = service.updateVideo(responseDto, id);
         return Objects.nonNull(updateVideo) ? ResponseEntity.status(HttpStatus.OK).body(responseDto) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/video/{id}")
+    @DeleteMapping("/videos/{id}")
     public ResponseEntity<Void> updateVideo(@PathVariable("id") Long id) {
         service.deleteVideo(id);
         return ResponseEntity.noContent().build();

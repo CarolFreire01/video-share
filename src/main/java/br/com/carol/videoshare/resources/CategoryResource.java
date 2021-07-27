@@ -22,14 +22,14 @@ public class CategoryResource {
     @Autowired
     CategoryServiceImpl service;
 
-    @PostMapping(path = "/category")
+    @PostMapping(path = "/categories")
     public ResponseEntity<CategoryDto> createdCategory(@RequestBody CategoryDto categoryDto){
         CategoryDto category = service.addCategory(categoryDto);
         return Objects.nonNull(category) ? ResponseEntity.status(HttpStatus.CREATED).body(category) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
     }
 
-    @GetMapping(path = "/category/{id}")
+    @GetMapping(path = "/categories/{id}")
     public ResponseEntity<Optional<Category>> findCategoryById(@PathVariable("id") Long id){
         Optional<Category> category = service.findCategoryById(id);
         return Objects.nonNull(category) ? ResponseEntity.status(HttpStatus.OK).body(category) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -41,13 +41,13 @@ public class CategoryResource {
         return Objects.nonNull(category) ? ResponseEntity.status(HttpStatus.OK).body(category) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping("/category/{id}")
+    @PutMapping("/categories/{id}")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryDto categoryDto){
         CategoryDto updateCategory = service.updateCategory(categoryDto, id);
         return Objects.nonNull(updateCategory) ? ResponseEntity.status(HttpStatus.OK).body(updateCategory) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @DeleteMapping("/category/{id}")
+    @DeleteMapping("/categories/{id}")
     public ResponseEntity<Void> deleteCategory(@PathVariable("id") Long id){
         service.deleteCategory(id);
         return ResponseEntity.noContent().build();

@@ -18,6 +18,7 @@ public class VideoDto extends Video {
     private String title;
     private String description;
     private String urlVideo;
+    private String category_id;
 
     public VideoDto(Video video){
         BeanUtils.copyProperties(video, this);
