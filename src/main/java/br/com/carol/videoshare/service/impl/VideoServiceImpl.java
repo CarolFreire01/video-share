@@ -6,6 +6,7 @@ import br.com.carol.videoshare.expections.BadRequestException;
 import br.com.carol.videoshare.expections.ObjectNotFoundExpection;
 import br.com.carol.videoshare.repository.VideoRepository;
 import br.com.carol.videoshare.service.VideoService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -67,11 +68,11 @@ public class VideoServiceImpl implements VideoService {
     }
 
     private void validateRequest(VideoDto videoDto){
-        if (videoDto.getTitle() == null || videoDto.getTitle().equals("")){
+        if (StringUtils.isBlank(videoDto.getTitle())){
             throw new BadRequestException("Title is mandatory");
-        } else if (videoDto.getDescription() == null || videoDto.getDescription().equals("")){
+        } else if (StringUtils.isBlank(videoDto.getDescription())){
             throw new BadRequestException("Description is mandatory");
-        } else if (videoDto.getUrlVideo() == null || videoDto.getUrlVideo().equals("")){
+        } else if (StringUtils.isBlank(videoDto.getUrlVideo())){
             throw new BadRequestException("Url is mandatory");
         }
     }
