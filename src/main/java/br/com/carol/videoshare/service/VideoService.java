@@ -13,6 +13,8 @@ public interface VideoService {
 
     Optional<Video> findVideoById(Long id);
 
+    List<VideoDto> findVideoByTitle(String title);
+
     List<Video> findAllVideos();
 
     VideoDto updateVideo(VideoDto videoResponseDto, Long id);

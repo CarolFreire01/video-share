@@ -7,6 +7,7 @@ import br.com.carol.videoshare.expections.ObjectNotFoundExpection;
 import br.com.carol.videoshare.repository.VideoRepository;
 import br.com.carol.videoshare.service.VideoService;
 import org.apache.commons.lang3.StringUtils;
+import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,18 @@ public class VideoServiceImpl implements VideoService {
         Video saveNewVideo = videoRepository.save(video);
 
         return new VideoDto(saveNewVideo);
+    }
+
+    @Override
+    public List<VideoDto> findVideoByTitle(String title){
+        List<VideoDto> findVideo = videoRepository.findByTitleLike(title);
+
+        if (findVideo == null){
+            throw new ObjectNotFoundExpection("There is no video with that name");
+        }
+
+        return findVideo;
+
     }
 
 
