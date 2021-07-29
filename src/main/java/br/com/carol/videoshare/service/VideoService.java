@@ -21,4 +21,6 @@ public interface VideoService {
 
     void deleteVideo(Long id);
 
+    List<Video> findVideosByCategoryId(Long category_id);
+
 }

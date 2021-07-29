@@ -44,6 +44,13 @@ public class VideoResource {
         return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @GetMapping("videos/category/{id}")
+    public ResponseEntity<List<Video>> findVideosByIdCategory(@PathVariable("id") Long category_id){
+        List<Video> videosByCategory = service.findVideosByCategoryId(category_id);
+        return Objects.nonNull(videosByCategory) ? ResponseEntity.status(HttpStatus.OK).body(videosByCategory) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+    }
+
     @PutMapping("/videos/{id}")
     public ResponseEntity<VideoDto> updateVideo(@PathVariable("id") Long id, @RequestBody VideoDto responseDto) {
         VideoDto updateVideo = service.updateVideo(responseDto, id);

@@ -7,7 +7,6 @@ import br.com.carol.videoshare.expections.ObjectNotFoundExpection;
 import br.com.carol.videoshare.repository.VideoRepository;
 import br.com.carol.videoshare.service.VideoService;
 import org.apache.commons.lang3.StringUtils;
-import org.omg.CosNaming.NamingContextPackage.NotFound;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +25,10 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public VideoDto addVideo(VideoDto videoDto) {
         validateRequest(videoDto);
+//
+//        if (videoDto.getCategory().getId() == null){
+//            videoDto.getCategory().setId(Long.valueOf(1));
+//        }
 
         Video video = this.dtoToEntityRequest(videoDto);
         Video saveNewVideo = videoRepository.save(video);
@@ -45,6 +48,18 @@ public class VideoServiceImpl implements VideoService {
 
     }
 
+    @Override
+    public List<Video> findVideosByCategoryId(Long category_id){
+        List<Video> findVideoByCategoryId = videoRepository.findVideosByCategory_Id(category_id);
+
+        if (findVideoByCategoryId == null){
+            throw new ObjectNotFoundExpection("No exists videos with this category id: " + category_id);
+        } else if(findVideoByCategoryId.isEmpty()){
+            throw new ObjectNotFoundExpection("Not exists videos with this category id " + category_id);
+        }
+
+        return findVideoByCategoryId;
+    }
 
     @Override
     public Optional<Video> findVideoById(Long id){

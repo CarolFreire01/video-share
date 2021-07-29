@@ -28,7 +28,7 @@ public class Category {
     private String title;
     private String color;
 
-    @OneToMany(mappedBy="category", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy="category", cascade = CascadeType.MERGE)
     private Set<Video> videos;
 
 }
