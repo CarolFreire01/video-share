@@ -1,7 +1,9 @@
 package br.com.carol.videoshare.resources;
 
 import br.com.carol.videoshare.dto.CategoryDto;
+import br.com.carol.videoshare.dto.VideoDto;
 import br.com.carol.videoshare.entities.Category;
+import br.com.carol.videoshare.entities.Video;
 import br.com.carol.videoshare.service.impl.CategoryServiceImpl;
 import jdk.nashorn.internal.ir.Optimistic;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +53,13 @@ public class CategoryResource {
     public ResponseEntity<Void> deleteCategory(@PathVariable("id") Long id){
         service.deleteCategory(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("categories/{id}/videos")
+    public ResponseEntity<?> findVideosByCategoryId(@PathVariable Long id){
+        List<Video> videoDtos = service.findVideosByCategoryId(id);
+        return Objects.nonNull(videoDtos) ? ResponseEntity.status(HttpStatus.OK).body(videoDtos) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
     }
 }
 

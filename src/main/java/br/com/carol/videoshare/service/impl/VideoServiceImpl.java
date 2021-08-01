@@ -25,10 +25,6 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public VideoDto addVideo(VideoDto videoDto) {
         validateRequest(videoDto);
-//
-//        if (videoDto.getCategory().getId() == null){
-//            videoDto.getCategory().setId(Long.valueOf(1));
-//        }
 
         Video video = this.dtoToEntityRequest(videoDto);
         Video saveNewVideo = videoRepository.save(video);
@@ -46,19 +42,6 @@ public class VideoServiceImpl implements VideoService {
 
         return findVideo;
 
-    }
-
-    @Override
-    public List<Video> findVideosByCategoryId(Long category_id){
-        List<Video> findVideoByCategoryId = videoRepository.findVideosByCategory_Id(category_id);
-
-        if (findVideoByCategoryId == null){
-            throw new ObjectNotFoundExpection("No exists videos with this category id: " + category_id);
-        } else if(findVideoByCategoryId.isEmpty()){
-            throw new ObjectNotFoundExpection("Not exists videos with this category id " + category_id);
-        }
-
-        return findVideoByCategoryId;
     }
 
     @Override

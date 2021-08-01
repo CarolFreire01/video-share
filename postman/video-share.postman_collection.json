@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "01cd48d0-da9e-4c51-9e7f-c2a8dda0c161",
-		"name": "video-share",
+		"name": "AluraFlix",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -54,7 +54,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\t\"title\": \"teste 66666\",\r\n    \"description\": \"novo video incluído\",\r\n    \"urlVideo\": \"http://www.carol.com.br\"\r\n}",
+							"raw": "{\r\n\t\"title\": \"teste 66666\",\r\n    \"description\": \"novo video incluído\",\r\n    \"urlVideo\": \"http://www.carol.com.br\",\r\n    \"category\": {\r\n        \"id\": \"1\"\r\n    }\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -123,6 +123,15 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "findByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
 				}
 			]
 		},
@@ -169,7 +178,26 @@
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "findVideosByCategoryId",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8080/categories",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8080",
+							"path": [
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "createCategory",
 					"request": {
 						"method": "POST",
 						"header": [],

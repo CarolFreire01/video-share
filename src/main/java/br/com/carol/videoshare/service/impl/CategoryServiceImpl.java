@@ -2,9 +2,11 @@ package br.com.carol.videoshare.service.impl;
 
 import br.com.carol.videoshare.dto.CategoryDto;
 import br.com.carol.videoshare.entities.Category;
+import br.com.carol.videoshare.entities.Video;
 import br.com.carol.videoshare.expections.BadRequestException;
 import br.com.carol.videoshare.expections.ObjectNotFoundExpection;
 import br.com.carol.videoshare.repository.CategoryRepository;
+import br.com.carol.videoshare.repository.VideoRepository;
 import br.com.carol.videoshare.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Autowired
     CategoryRepository repository;
+
+    @Autowired
+    VideoRepository videoRepository;
 
     @Override
     public CategoryDto addCategory(CategoryDto categoryDto) {
@@ -62,6 +67,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Long id) {
         repository.deleteById(id);
+    }
+
+    @Override
+    public List<Video> findVideosByCategoryId(Long id_category) {
+        Optional<Category> categories = repository.findById(id_category);
+
+        return videoRepository.findByCategory(categories);
     }
 
     private void validateRequest(CategoryDto categoryDto){
