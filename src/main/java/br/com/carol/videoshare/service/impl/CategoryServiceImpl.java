@@ -10,11 +10,15 @@ import br.com.carol.videoshare.repository.VideoRepository;
 import br.com.carol.videoshare.service.CategoryService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -42,8 +46,10 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> findAllCategory() {
-        return repository.findAll();
+    public Page<Category> findAllCategory(int offset, int limit) {
+        Pageable paging = PageRequest.of(offset, limit);
+
+        return repository.findAll(paging);
     }
 
     @Override
@@ -70,10 +76,15 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Video> findVideosByCategoryId(Long id_category) {
+    public Page<Video> findVideosByCategoryId(Long id_category, int offset, int limit) {
         Optional<Category> categories = repository.findById(id_category);
 
-        return videoRepository.findByCategory(categories);
+        if (Objects.nonNull(categories)){
+            Page<Video> result = videoRepository.findByCategory(categories, PageRequest.of(offset, limit));
+            return result;
+        } else {
+            throw new ObjectNotFoundExpection("Id Category not found");
+        }
     }
 
     private void validateRequest(CategoryDto categoryDto){

@@ -4,11 +4,15 @@ import br.com.carol.videoshare.dto.VideoDto;
 import br.com.carol.videoshare.entities.Video;
 import br.com.carol.videoshare.service.impl.VideoServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -33,14 +37,14 @@ public class VideoResource {
     }
 
     @GetMapping("/videos")
-    public ResponseEntity<List<Video>> findAllVideos() {
-        List<Video> video = service.findAllVideos();
+    public ResponseEntity<Page<Video>> findAllVideos(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "5") int limit) {
+        Page<Video> video = service.findAllVideos(offset, limit);
         return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @GetMapping("/videos/{title}")
-    public ResponseEntity<List<VideoDto>> findVideoByName(@RequestParam("title") String title) {
-        List<VideoDto> video = service.findVideoByTitle(title);
+    @GetMapping("/videos/name={title}")
+    public ResponseEntity<Page<VideoDto>> findVideoByName(@PathVariable("title") String title, @RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "5") int limit) {
+        Page<VideoDto> video = service.findVideoByTitle(title, offset, limit);
         return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 

@@ -9,8 +9,11 @@ import br.com.carol.videoshare.service.VideoService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,8 +36,8 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public List<VideoDto> findVideoByTitle(String title){
-        List<VideoDto> findVideo = videoRepository.findByTitleLike(title);
+    public Page<VideoDto> findVideoByTitle(String title, int offset, int limit){
+        Page<VideoDto> findVideo = videoRepository.findByTitleLike(title, PageRequest.of(offset, limit));
 
         if (findVideo == null){
             throw new ObjectNotFoundExpection("There is no video with that name");
@@ -49,9 +52,10 @@ public class VideoServiceImpl implements VideoService {
        return videoRepository.findById(id);
     }
 
-    @Override
-    public List<Video> findAllVideos(){
-      return videoRepository.findAll();
+    public Page<Video> findAllVideos(int offset, int limit){
+        Pageable paging = PageRequest.of(offset, limit);
+
+        return videoRepository.findAll(paging);
     }
 
     @Override
