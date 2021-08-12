@@ -48,6 +48,11 @@ public class VideoResource {
         return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
+    @GetMapping("/videos/free")
+    public ResponseEntity<List<Video>> findVideosFree(){
+        List<Video> freeVideos = service.listFreeVideos();
+        return Objects.nonNull(freeVideos) ? ResponseEntity.status(HttpStatus.OK).body(freeVideos) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
 
     @PutMapping("/videos/{id}")
     public ResponseEntity<VideoDto> updateVideo(@PathVariable("id") Long id, @RequestBody VideoDto responseDto) {

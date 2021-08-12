@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,4 +22,7 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     Page<VideoDto> findByTitleLike(String title, Pageable pageable);
 
     Page<Video> findByCategory(Optional<Category> category, Pageable pageable);
+
+    @Query(nativeQuery = true, value = "select * from videos v order by v.id limit :number")
+    List<Video> findVideosFree(@Param("number") Byte quantidade);
 }

@@ -82,6 +82,15 @@ public class VideoServiceImpl implements VideoService {
         videoRepository.deleteById(id);
     }
 
+    @Override
+    public List<Video> listFreeVideos() {
+        final Byte number = 10;
+
+        List<Video> videoFree = videoRepository.findVideosFree(number);
+        return videoFree;
+
+    }
+
     private void validateRequest(VideoDto videoDto){
         if (StringUtils.isBlank(videoDto.getTitle())){
             throw new BadRequestException("Title is mandatory");
