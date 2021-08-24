@@ -14,7 +14,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-
 @Repository
 public interface VideoRepository extends JpaRepository<Video, Long> {
 
@@ -24,5 +23,5 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     Page<Video> findByCategory(Optional<Category> category, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select * from videos v order by v.id limit :number")
-    List<Video> findVideosFree(@Param("number") Byte quantidade);
+    List<Video> findVideosFree(@Param("number") Byte quantity);
 }

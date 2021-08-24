@@ -3,11 +3,11 @@ package br.com.carol.videoshare.service;
 import br.com.carol.videoshare.dto.VideoDto;
 import br.com.carol.videoshare.entities.Video;
 import br.com.carol.videoshare.expections.BadRequestException;
-import br.com.carol.videoshare.expections.ObjectNotFoundExpection;
+import br.com.carol.videoshare.expections.ObjectNotFoundException;
 import br.com.carol.videoshare.repository.VideoRepository;
+import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,13 +16,11 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-
+@RequiredArgsConstructor
 @Service
 public class VideoService {
 
-    @Autowired
-    VideoRepository videoRepository;
-
+    final private VideoRepository videoRepository;
 
     public VideoDto addVideo(VideoDto videoDto) {
         validateRequest(videoDto);
@@ -37,7 +35,7 @@ public class VideoService {
         Page<VideoDto> findVideo = videoRepository.findByTitleLike(title, PageRequest.of(offset, limit));
 
         if (findVideo == null){
-            throw new ObjectNotFoundExpection("There is no video with that name");
+            throw new ObjectNotFoundException("There is no video with that name");
         }
 
         return findVideo;
@@ -68,7 +66,7 @@ public class VideoService {
 
            return new VideoDto(updatedVideo);
        } else {
-           throw new ObjectNotFoundExpection("Video not found");
+           throw new ObjectNotFoundException("Video not found");
        }
     }
 
@@ -81,9 +79,7 @@ public class VideoService {
     public List<Video> listFreeVideos() {
         final Byte number = 10;
 
-        List<Video> videoFree = videoRepository.findVideosFree(number);
-        return videoFree;
-
+        return videoRepository.findVideosFree(number);
     }
 
     private void validateRequest(VideoDto videoDto){

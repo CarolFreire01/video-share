@@ -14,8 +14,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-@Controller
 @RequiredArgsConstructor
+@Controller
 public class VideoResource {
 
     private final VideoService videoService;
@@ -46,7 +46,7 @@ public class VideoResource {
     }
 
     @GetMapping("/videos/free")
-    public ResponseEntity<List<Video>> findVideosFree(){
+    public ResponseEntity<List<Video>> findVideosFree() {
         List<Video> freeVideos = videoService.listFreeVideos();
         return Objects.nonNull(freeVideos) ? ResponseEntity.status(HttpStatus.OK).body(freeVideos) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
@@ -62,4 +62,5 @@ public class VideoResource {
         videoService.deleteVideo(id);
         return ResponseEntity.noContent().build();
     }
+
 }

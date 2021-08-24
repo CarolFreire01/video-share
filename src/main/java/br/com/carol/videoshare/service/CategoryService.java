@@ -4,29 +4,25 @@ import br.com.carol.videoshare.dto.CategoryDto;
 import br.com.carol.videoshare.entities.Category;
 import br.com.carol.videoshare.entities.Video;
 import br.com.carol.videoshare.expections.BadRequestException;
-import br.com.carol.videoshare.expections.ObjectNotFoundExpection;
+import br.com.carol.videoshare.expections.ObjectNotFoundException;
 import br.com.carol.videoshare.repository.CategoryRepository;
 import br.com.carol.videoshare.repository.VideoRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
-
-import java.util.Objects;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class CategoryService {
 
-    @Autowired
-    CategoryRepository repository;
-
-    @Autowired
-    VideoRepository videoRepository;
+    private final CategoryRepository repository;
+    private final VideoRepository videoRepository;
 
     public CategoryDto addCategory(CategoryDto categoryDto) {
         validateRequest(categoryDto);
@@ -60,7 +56,7 @@ public class CategoryService {
 
             return new CategoryDto(updatedCategory);
         } else {
-            throw new ObjectNotFoundExpection("Category not found");
+            throw new ObjectNotFoundException("Category not found");
         }
     }
 
@@ -71,11 +67,10 @@ public class CategoryService {
     public Page<Video> findVideosByCategoryId(Long id_category, int offset, int limit) {
         Optional<Category> categories = repository.findById(id_category);
 
-        if (Objects.nonNull(categories)){
-            Page<Video> result = videoRepository.findByCategory(categories, PageRequest.of(offset, limit));
-            return result;
-        } else {
-            throw new ObjectNotFoundExpection("Id Category not found");
+        try {
+            return videoRepository.findByCategory(categories, PageRequest.of(offset, limit));
+        } catch (ObjectNotFoundException e) {
+            throw new ObjectNotFoundException("Id Category not found");
         }
     }
 
