@@ -5,7 +5,7 @@ import br.com.carol.videoshare.dto.JwtResponse;
 import br.com.carol.videoshare.entities.User;
 import br.com.carol.videoshare.security.JwtTokenUtil;
 import br.com.carol.videoshare.service.JwtUserDetailsService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,21 +17,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+@RequiredArgsConstructor
 @Controller
 public class UserResource {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
-
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
-
-    @Autowired
-    private JwtUserDetailsService userDetailsService;
+    final private AuthenticationManager authenticationManager;
+    final private JwtTokenUtil jwtTokenUtil;
+    final private JwtUserDetailsService userDetailsService;
 
     @RequestMapping(value = "/validate", method = RequestMethod.POST)
     public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtRequest authenticationRequest) throws Exception {
-
         authenticate(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
@@ -42,7 +37,7 @@ public class UserResource {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody User user) throws Exception {
+    public ResponseEntity<?> saveUser(@RequestBody User user) {
         return ResponseEntity.ok(userDetailsService.save(user));
     }
 

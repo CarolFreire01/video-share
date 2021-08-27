@@ -10,6 +10,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+
 @Service
 public class JwtUserDetailsService implements UserDetailsService {
 
@@ -35,4 +36,5 @@ public class JwtUserDetailsService implements UserDetailsService {
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
         return userRepository.save(newUser);
     }
+
 }
