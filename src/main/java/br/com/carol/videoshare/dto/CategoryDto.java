@@ -13,7 +13,7 @@ import org.springframework.beans.BeanUtils;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CategoryDto extends Category {
+public class CategoryDto {
 
     private Long id;
     private String title;

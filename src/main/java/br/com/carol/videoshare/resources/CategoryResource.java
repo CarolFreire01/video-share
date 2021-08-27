@@ -33,7 +33,7 @@ public class CategoryResource {
     }
 
     @GetMapping(path = "/categories")
-    public ResponseEntity<Page<Category>> findCategoryById(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "5") int limit) {
+    public ResponseEntity<Page<Category>> findAllCategory(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "5") int limit) {
         Page<Category> category = service.findAllCategory(offset, limit);
         return Objects.nonNull(category) ? ResponseEntity.status(HttpStatus.OK).body(category) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
