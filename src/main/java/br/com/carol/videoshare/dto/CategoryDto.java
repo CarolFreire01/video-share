@@ -3,6 +3,7 @@ package br.com.carol.videoshare.dto;
 import br.com.carol.videoshare.entities.Category;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 
