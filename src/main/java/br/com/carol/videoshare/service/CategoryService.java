@@ -15,7 +15,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -37,10 +39,18 @@ public class CategoryService {
         return repository.findById(id);
     }
 
-    public Page<Category> findAllCategory(int offset, int limit) {
-        Pageable paging = PageRequest.of(offset, limit);
+    public List<CategoryDto> findAllCategory(Pageable pageable) {
 
-        return repository.findAll(paging);
+        Page<Category> allCategories = repository.findAll(pageable);
+
+        if (allCategories.isEmpty()){
+            throw new ObjectNotFoundException("Categories not found");
+        }
+
+        return allCategories.stream()
+                .map(this::buildCategory)
+                .collect(Collectors.toList());
+
     }
 
     public CategoryDto updateCategory(CategoryDto categoryDto, Long id) {
@@ -64,6 +74,7 @@ public class CategoryService {
         repository.deleteById(id);
     }
 
+    /*Realizar ajustes */
     public Page<Video> findVideosByCategoryId(Long id_category, int offset, int limit) {
         Optional<Category> categories = repository.findById(id_category);
 
@@ -86,5 +97,13 @@ public class CategoryService {
         Category category = new Category();
         BeanUtils.copyProperties(categoryDto, category);
         return category;
+    }
+
+    private CategoryDto buildCategory(Category category){
+        return CategoryDto.builder()
+                .id(category.getId())
+                .title(category.getTitle())
+                .color(category.getColor())
+                .build();
     }
 }

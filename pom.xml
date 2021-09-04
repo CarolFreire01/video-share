@@ -18,8 +18,10 @@
 
     <properties>
         <java.version>1.8</java.version>
-        <jwt.version>0.7.0</jwt.version>
-        <security-version>5.4.5</security-version>
+        <jwt.version>0.9.1</jwt.version>
+        <security.version>5.4.5</security.version>
+        <mockito.version>3.12.4</mockito.version>
+        <junit.version>5.7.2</junit.version>
     </properties>
 
     <dependencies>
@@ -34,7 +36,6 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.11</version>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -54,7 +55,7 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
-            <version>${junit-jupiter.version}</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -83,7 +84,6 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-            <version>${security-version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -9,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -31,24 +31,33 @@ public class VideoService {
         return new VideoDto(saveNewVideo);
     }
 
-    public Page<VideoDto> findVideoByTitle(String title, int offset, int limit){
-        Page<VideoDto> findVideo = videoRepository.findByTitleLike(title, PageRequest.of(offset, limit));
+    public List<VideoDto> findVideoByTitle(String title, Pageable pageable){
+        Page<VideoDto> allVideosByTitle = videoRepository.findByTitleLike(title, pageable);
 
-        if (findVideo == null){
+        if (allVideosByTitle.isEmpty()){
             throw new ObjectNotFoundException("There is no video with that name");
         }
 
-        return findVideo;
+        return allVideosByTitle.stream()
+                .map(this::buildVideos)
+                .collect(Collectors.toList());
+
+    }
+
+    public List<VideoDto> findAllVideos(Pageable pageable){
+        Page<Video> allVideos = videoRepository.findAll(pageable);
+
+        if (allVideos.isEmpty()){
+            throw new ObjectNotFoundException("There is no video with that name");
+        }
+
+        return allVideos.stream()
+                .map(this::buildVideos)
+                .collect(Collectors.toList());
     }
 
     public Optional<Video> findVideoById(Long id){
        return videoRepository.findById(id);
-    }
-
-    public Page<Video> findAllVideos(int offset, int limit){
-        Pageable paging = PageRequest.of(offset, limit);
-
-        return videoRepository.findAll(paging);
     }
 
     public VideoDto updateVideo(VideoDto videoDto, Long id) {
@@ -95,6 +104,16 @@ public class VideoService {
         Video video = new Video();
         BeanUtils.copyProperties(requestDto, video);
         return video;
+    }
+
+    private VideoDto buildVideos(Video video){
+        return VideoDto.builder()
+                .id(video.getId())
+                .title(video.getTitle())
+                .description(video.getDescription())
+                .urlVideo(video.getUrlVideo())
+                .category_id(video.getCategory().getId())
+                .build();
     }
 
 }

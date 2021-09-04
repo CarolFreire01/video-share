@@ -15,6 +15,7 @@ import org.springframework.beans.BeanUtils;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class VideoDto extends Video {
 
+    private Long id;
     private String title;
     private String description;
     private String urlVideo;

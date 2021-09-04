@@ -4,14 +4,14 @@ import br.com.carol.videoshare.dto.VideoDto;
 import br.com.carol.videoshare.entities.Video;
 import br.com.carol.videoshare.service.VideoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -22,39 +22,35 @@ public class VideoResource {
 
     @PostMapping(path = "/videos")
     public ResponseEntity<VideoDto> createVideo(@RequestBody VideoDto requestDto) {
-        VideoDto requestVideo = videoService.addVideo(requestDto);
-        return Objects.nonNull(requestVideo) ? ResponseEntity.status(HttpStatus.CREATED).body(requestVideo) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.CREATED).body(videoService.addVideo(requestDto));
     }
 
     @GetMapping("/videos/{id}")
     public ResponseEntity<Optional<Video>> findVideo(@PathVariable("id") Long id) {
-        Optional<Video> video = videoService.findVideoById(id);
-        return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.OK).body(videoService.findVideoById(id));
 
     }
 
     @GetMapping("/videos")
-    public ResponseEntity<Page<Video>> findAllVideos(@RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "5") int limit) {
-        Page<Video> video = videoService.findAllVideos(offset, limit);
-        return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    public ResponseEntity<List<VideoDto>> findAllVideos(@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
+        Pageable pageReq = pageable(offset, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(videoService.findAllVideos(pageReq));
     }
 
-    @GetMapping("/videos/name={title}")
-    public ResponseEntity<Page<VideoDto>> findVideoByName(@PathVariable("title") String title, @RequestParam(defaultValue = "0") int offset, @RequestParam(defaultValue = "5") int limit) {
-        Page<VideoDto> video = videoService.findVideoByTitle(title, offset, limit);
-        return Objects.nonNull(video) ? ResponseEntity.status(HttpStatus.OK).body(video) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    @GetMapping("/videos/title={title}")
+    public ResponseEntity<List<VideoDto>> findVideoByName(@PathVariable("title") String title, @RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
+        Pageable pageReq = pageable(offset, limit);
+        return ResponseEntity.status(HttpStatus.OK).body(videoService.findVideoByTitle(title, pageReq));
     }
 
     @GetMapping("/videos/free")
     public ResponseEntity<List<Video>> findVideosFree() {
-        List<Video> freeVideos = videoService.listFreeVideos();
-        return Objects.nonNull(freeVideos) ? ResponseEntity.status(HttpStatus.OK).body(freeVideos) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.OK).body(videoService.listFreeVideos());
     }
 
     @PutMapping("/videos/{id}")
     public ResponseEntity<VideoDto> updateVideo(@PathVariable("id") Long id, @RequestBody VideoDto responseDto) {
-        VideoDto updateVideo = videoService.updateVideo(responseDto, id);
-        return Objects.nonNull(updateVideo) ? ResponseEntity.status(HttpStatus.OK).body(responseDto) : ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.status(HttpStatus.OK).body(videoService.updateVideo(responseDto, id));
     }
 
     @DeleteMapping("/videos/{id}")
@@ -63,4 +59,10 @@ public class VideoResource {
         return ResponseEntity.noContent().build();
     }
 
+    private Pageable pageable(Integer offset, Integer limit){
+        int page = offset != null ? offset : 0;
+        int size = limit != null ? limit : 5;
+
+        return PageRequest.of(page, size);
+    }
 }
