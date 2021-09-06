@@ -35,17 +35,23 @@ public class CategoryService {
     }
 
     public Optional<Category> findCategoryById(Long id) {
-        return repository.findById(id);
+        Optional<Category> findCategory = repository.findById(id);
+
+        if (!findCategory.isPresent()){
+            throw new ObjectNotFoundException("Category is not found");
+        }
+
+        return findCategory;
     }
 
     public List<CategoryDto> findAllCategory(Pageable pageable) {
-        Page<Category> allCategories = repository.findAll(pageable);
+        Page<Category> findAllCategories = repository.findAll(pageable);
 
-        if (allCategories.isEmpty()){
+        if (findAllCategories.isEmpty()){
             throw new ObjectNotFoundException("Categories not found");
         }
 
-        return allCategories.stream()
+        return findAllCategories.stream()
                 .map(this::buildCategory)
                 .collect(Collectors.toList());
     }
@@ -72,17 +78,18 @@ public class CategoryService {
     }
 
     public List<Video> findVideosByCategoryId(Long id_category, Pageable pageable) {
-        Optional<Category> categories = repository.findById(id_category);
+       Optional<Category> categories = repository.findById(id_category);
 
-        try {
-            return videoRepository.findByCategory(categories, pageable);
-        } catch (ObjectNotFoundException e) {
-            throw new ObjectNotFoundException("Id Category not found");
-        }
+       if (!categories.isPresent()){
+           throw new ObjectNotFoundException("Id Category not found");
+       }
+
+       return videoRepository.findByCategory(categories, pageable);
+
     }
 
     private void validateRequest(CategoryDto categoryDto){
-        if(StringUtils.isBlank(categoryDto.getTitle())){
+        if (StringUtils.isBlank(categoryDto.getTitle())){
             throw new BadRequestException("Title is empty");
         } else if(StringUtils.isBlank(categoryDto.getColor())){
             throw new BadRequestException("Color is empty");

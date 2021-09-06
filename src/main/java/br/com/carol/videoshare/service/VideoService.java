@@ -56,7 +56,11 @@ public class VideoService {
     }
 
     public Optional<Video> findVideoById(Long id){
-       return videoRepository.findById(id);
+        try {
+            return videoRepository.findById(id);
+        } catch (ObjectNotFoundException e){
+            throw new ObjectNotFoundException("Video not found");
+        }
     }
 
     public VideoDto updateVideo(VideoDto videoDto, Long id) {
@@ -76,7 +80,7 @@ public class VideoService {
     }
 
     public void deleteVideo(Long id){
-        videoRepository.deleteById(id);
+            videoRepository.deleteById(id);
     }
 
     public List<Video> listFreeVideos() {
