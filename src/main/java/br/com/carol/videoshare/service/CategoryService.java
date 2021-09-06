@@ -10,7 +10,6 @@ import br.com.carol.videoshare.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
@@ -40,7 +39,6 @@ public class CategoryService {
     }
 
     public List<CategoryDto> findAllCategory(Pageable pageable) {
-
         Page<Category> allCategories = repository.findAll(pageable);
 
         if (allCategories.isEmpty()){
@@ -50,7 +48,6 @@ public class CategoryService {
         return allCategories.stream()
                 .map(this::buildCategory)
                 .collect(Collectors.toList());
-
     }
 
     public CategoryDto updateCategory(CategoryDto categoryDto, Long id) {
@@ -74,12 +71,11 @@ public class CategoryService {
         repository.deleteById(id);
     }
 
-    /*Realizar ajustes */
-    public Page<Video> findVideosByCategoryId(Long id_category, int offset, int limit) {
+    public List<Video> findVideosByCategoryId(Long id_category, Pageable pageable) {
         Optional<Category> categories = repository.findById(id_category);
 
         try {
-            return videoRepository.findByCategory(categories, PageRequest.of(offset, limit));
+            return videoRepository.findByCategory(categories, pageable);
         } catch (ObjectNotFoundException e) {
             throw new ObjectNotFoundException("Id Category not found");
         }

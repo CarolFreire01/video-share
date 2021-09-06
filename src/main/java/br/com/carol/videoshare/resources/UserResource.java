@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/user")
 public class UserResource {
 
     final private AuthenticationManager authenticationManager;

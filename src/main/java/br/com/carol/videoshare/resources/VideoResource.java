@@ -16,44 +16,44 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
+@RequestMapping("/videos")
 public class VideoResource {
 
     private final VideoService videoService;
 
-    @PostMapping(path = "/videos")
+    @PostMapping
     public ResponseEntity<VideoDto> createVideo(@RequestBody VideoDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(videoService.addVideo(requestDto));
     }
 
-    @GetMapping("/videos/{id}")
-    public ResponseEntity<Optional<Video>> findVideo(@PathVariable("id") Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(videoService.findVideoById(id));
-
-    }
-
-    @GetMapping("/videos")
+    @GetMapping
     public ResponseEntity<List<VideoDto>> findAllVideos(@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
         Pageable pageReq = pageable(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(videoService.findAllVideos(pageReq));
     }
 
-    @GetMapping("/videos/title={title}")
+    @GetMapping("/{id}")
+    public ResponseEntity<Optional<Video>> findVideo(@PathVariable("id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(videoService.findVideoById(id));
+    }
+
+    @GetMapping("/title={title}")
     public ResponseEntity<List<VideoDto>> findVideoByName(@PathVariable("title") String title, @RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
         Pageable pageReq = pageable(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(videoService.findVideoByTitle(title, pageReq));
     }
 
-    @GetMapping("/videos/free")
+    @GetMapping("/free")
     public ResponseEntity<List<Video>> findVideosFree() {
         return ResponseEntity.status(HttpStatus.OK).body(videoService.listFreeVideos());
     }
 
-    @PutMapping("/videos/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<VideoDto> updateVideo(@PathVariable("id") Long id, @RequestBody VideoDto responseDto) {
         return ResponseEntity.status(HttpStatus.OK).body(videoService.updateVideo(responseDto, id));
     }
 
-    @DeleteMapping("/videos/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> updateVideo(@PathVariable("id") Long id) {
         videoService.deleteVideo(id);
         return ResponseEntity.noContent().build();

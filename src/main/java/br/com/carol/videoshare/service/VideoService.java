@@ -41,7 +41,6 @@ public class VideoService {
         return allVideosByTitle.stream()
                 .map(this::buildVideos)
                 .collect(Collectors.toList());
-
     }
 
     public List<VideoDto> findAllVideos(Pageable pageable){
@@ -66,9 +65,7 @@ public class VideoService {
        if (videoRepository.findById(id).isPresent()){
            Video existingVideo = videoRepository.findById(id).get();
 
-           existingVideo.setTitle(videoDto.getTitle());
-           existingVideo.setDescription(videoDto.getDescription());
-           existingVideo.setUrlVideo(videoDto.getUrlVideo());
+          buildVideos(existingVideo);
 
            Video updatedVideo = videoRepository.save(existingVideo);
 
@@ -78,15 +75,12 @@ public class VideoService {
        }
     }
 
-
     public void deleteVideo(Long id){
         videoRepository.deleteById(id);
     }
 
-
     public List<Video> listFreeVideos() {
         final Byte number = 10;
-
         return videoRepository.findVideosFree(number);
     }
 

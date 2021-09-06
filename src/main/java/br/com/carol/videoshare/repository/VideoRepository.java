@@ -1,5 +1,6 @@
 package br.com.carol.videoshare.repository;
 
+import br.com.carol.videoshare.dto.CategoryDto;
 import br.com.carol.videoshare.dto.VideoDto;
 import br.com.carol.videoshare.entities.Category;
 import br.com.carol.videoshare.entities.Video;
@@ -20,7 +21,7 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     @Query("SELECT v.id, v.title, v.description FROM Video v where v.title LIKE :title%")
     Page<VideoDto> findByTitleLike(String title, Pageable pageable);
 
-    Page<Video> findByCategory(Optional<Category> category, Pageable pageable);
+    List<Video> findByCategory(Optional<Category> category, Pageable pageable);
 
     @Query(nativeQuery = true, value = "select * from videos v order by v.id limit :number")
     List<Video> findVideosFree(@Param("number") Byte quantity);
