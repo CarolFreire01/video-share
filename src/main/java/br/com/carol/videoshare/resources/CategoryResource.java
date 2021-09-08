@@ -1,12 +1,10 @@
 package br.com.carol.videoshare.resources;
 
 import br.com.carol.videoshare.dto.CategoryDto;
-import br.com.carol.videoshare.dto.VideoDto;
 import br.com.carol.videoshare.entities.Category;
 import br.com.carol.videoshare.entities.Video;
 import br.com.carol.videoshare.service.CategoryService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;

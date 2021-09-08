@@ -32,7 +32,11 @@ public class VideoService {
     }
 
     public List<VideoDto> findVideoByTitle(String title, Pageable pageable){
-        Page<VideoDto> allVideosByTitle = videoRepository.findByTitleLike(title, pageable);
+        if (title.length() < 3){
+            throw new BadRequestException("title cannot be less than 3 characters");
+        }
+
+        Page<Video> allVideosByTitle = videoRepository.findByTitleLike(title, pageable);
 
         if (allVideosByTitle.isEmpty()){
             throw new ObjectNotFoundException("There is no video with that name");
