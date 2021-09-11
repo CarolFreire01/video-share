@@ -6,7 +6,7 @@ spring:
       ddl-auto: update
 
   datasource:
-    url: jdbc:postgresql://127.0.0.1:5432/postgres
+    url: ${JDBC_DATASOURCE_URL}
     username: postgres
     password: Nmasjk.100
     driver-class-name: org.postgresql.Driver
