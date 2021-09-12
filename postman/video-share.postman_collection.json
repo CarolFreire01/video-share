@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "01cd48d0-da9e-4c51-9e7f-c2a8dda0c161",
-		"name": "AluraFlix",
+		"name": "VideoShare",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
@@ -126,6 +126,15 @@
 				},
 				{
 					"name": "findByName",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "freeVideos",
 					"request": {
 						"method": "GET",
 						"header": [],
@@ -257,7 +266,13 @@
 					"name": "deleteCategories",
 					"request": {
 						"method": "DELETE",
-						"header": [],
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjYXJvbCIsImV4cCI6MTYzMTQ5OTY0OSwiaWF0IjoxNjMxNDgxNjQ5fQ.9OKptD_LhOTD0KEqVDPNvZ18qweyMwurd25zEp_9uS3Atq3-Im_3uKyp21XBjjTGzHkY2H1fXoJ9i83IX5Gukg",
+								"type": "text"
+							}
+						],
 						"url": {
 							"raw": "http://localhost:8080/categories/2",
 							"protocol": "http",
@@ -270,6 +285,29 @@
 								"2"
 							]
 						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "validateUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
+					},
+					"response": []
+				},
+				{
+					"name": "createuser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": null
 					},
 					"response": []
 				}
