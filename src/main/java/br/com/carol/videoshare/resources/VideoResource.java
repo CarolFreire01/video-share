@@ -1,7 +1,7 @@
 package br.com.carol.videoshare.resources;
 
-import br.com.carol.videoshare.dto.VideoDto;
-import br.com.carol.videoshare.entities.Video;
+import br.com.carol.videoshare.dto.VideoRequest;
+import br.com.carol.videoshare.dto.VideoResponse;
 import br.com.carol.videoshare.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -22,34 +21,34 @@ public class VideoResource {
     private final VideoService videoService;
 
     @PostMapping
-    public ResponseEntity<VideoDto> createVideo(@RequestBody VideoDto requestDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(videoService.addVideo(requestDto));
+    public ResponseEntity<VideoResponse> createVideo(@RequestBody VideoRequest videoRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(videoService.addVideo(videoRequest));
     }
 
     @GetMapping
-    public ResponseEntity<List<VideoDto>> findAllVideos(@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
+    public ResponseEntity<List<VideoResponse>> findAllVideos(@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
         Pageable pageReq = pageable(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(videoService.findAllVideos(pageReq));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Video>> findVideo(@PathVariable("id") Long id) {
+    public ResponseEntity<VideoResponse> findVideo(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(videoService.findVideoById(id));
     }
 
     @GetMapping("/title={title}")
-    public ResponseEntity<List<VideoDto>> findVideoByName(@PathVariable("title") String title, @RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
+    public ResponseEntity<List<VideoResponse>> findVideoByName(@PathVariable("title") String title, @RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
         Pageable pageReq = pageable(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(videoService.findVideoByTitle(title, pageReq));
     }
 
     @GetMapping("/free")
-    public ResponseEntity<List<Video>> findVideosFree() {
+    public ResponseEntity<List<VideoResponse>> findVideosFree() {
         return ResponseEntity.status(HttpStatus.OK).body(videoService.listFreeVideos());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<VideoDto> updateVideo(@PathVariable("id") Long id, @RequestBody VideoDto responseDto) {
+    public ResponseEntity<VideoResponse> updateVideo(@PathVariable("id") Long id, @RequestBody VideoRequest responseDto) {
         return ResponseEntity.status(HttpStatus.OK).body(videoService.updateVideo(responseDto, id));
     }
 

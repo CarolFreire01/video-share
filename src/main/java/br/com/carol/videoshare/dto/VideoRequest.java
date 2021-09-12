@@ -1,9 +1,8 @@
 package br.com.carol.videoshare.dto;
 
-import br.com.carol.videoshare.entities.Category;
+import br.com.carol.videoshare.entities.Video;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
-
 import lombok.*;
 import org.springframework.beans.BeanUtils;
 
@@ -14,11 +13,12 @@ import org.springframework.beans.BeanUtils;
 @NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class CategoryDto {
+public class VideoRequest {
 
     private Long id;
     private String title;
-    private String color;
+    private String description;
+    private String urlVideo;
+    private Long category_id;
 
-    public CategoryDto(Category category){BeanUtils.copyProperties(category, this);}
 }
