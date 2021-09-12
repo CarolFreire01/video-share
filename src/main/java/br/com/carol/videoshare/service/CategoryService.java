@@ -1,109 +1,83 @@
 package br.com.carol.videoshare.service;
 
-import br.com.carol.videoshare.dto.CategoryDto;
+import br.com.carol.videoshare.dto.CategoryRequest;
+import br.com.carol.videoshare.dto.CategoryResponse;
 import br.com.carol.videoshare.entities.Category;
-import br.com.carol.videoshare.entities.Video;
 import br.com.carol.videoshare.expections.BadRequestException;
 import br.com.carol.videoshare.expections.ObjectNotFoundException;
 import br.com.carol.videoshare.repository.CategoryRepository;
-import br.com.carol.videoshare.repository.VideoRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
 public class CategoryService {
 
-    private final CategoryRepository repository;
-    private final VideoRepository videoRepository;
+    private final CategoryRepository categoryRepository;
 
-    public CategoryDto addCategory(CategoryDto categoryDto) {
-        validateRequest(categoryDto);
+    public CategoryResponse addCategory(CategoryRequest categoryRequest) {
+        validateRequest(categoryRequest);
 
-        Category category = this.dtoToEntity(categoryDto);
-        Category newCategory = repository.save(category);
+        Category category = this.buildCategoryRequest(categoryRequest);
+        Category newCategory = categoryRepository.save(category);
 
-        return new CategoryDto(newCategory);
+        return buildCategoryResponse(newCategory);
     }
 
-    public Optional<Category> findCategoryById(Long id) {
-        Optional<Category> findCategory = repository.findById(id);
-
-        if (!findCategory.isPresent()){
-            throw new ObjectNotFoundException("Category is not found");
-        }
-
-        return findCategory;
+    public Category findCategoryById(Long id) {
+        return categoryRepository.findCategoryById(id);
     }
 
-    public List<CategoryDto> findAllCategory(Pageable pageable) {
-        Page<Category> findAllCategories = repository.findAll(pageable);
+    public List<CategoryResponse> findAllCategory(Pageable pageable) {
+        Page<Category> findAllCategories = categoryRepository.findAll(pageable);
 
         if (findAllCategories.isEmpty()){
             throw new ObjectNotFoundException("Categories not found");
         }
 
         return findAllCategories.stream()
-                .map(this::buildCategory)
+                .map(this::buildCategoryResponse)
                 .collect(Collectors.toList());
     }
 
-    public CategoryDto updateCategory(CategoryDto categoryDto, Long id) {
-        validateRequest(categoryDto);
+    public CategoryResponse updateCategory(CategoryRequest categoryRequest, Long idCategory) {
+        Category existingCategory = categoryRepository.findCategoryById(idCategory);
 
-        if (repository.findById(id).isPresent()){
-            Category existingCategory = repository.findById(id).get();
+        existingCategory.updateCategory(categoryRequest);
 
-            existingCategory.setTitle(categoryDto.getTitle());
-            existingCategory.setColor(categoryDto.getColor());
+        Category updatedCategory = categoryRepository.save(existingCategory);
 
-            Category updatedCategory = repository.save(existingCategory);
-
-            return new CategoryDto(updatedCategory);
-        } else {
-            throw new ObjectNotFoundException("Category not found");
-        }
+        return buildCategoryResponse(updatedCategory);
     }
 
     public void deleteCategory(Long id) {
-        repository.deleteById(id);
+        categoryRepository.deleteById(id);
     }
 
-    public List<Video> findVideosByCategoryId(Long id_category, Pageable pageable) {
-       Optional<Category> categories = repository.findById(id_category);
-
-       if (!categories.isPresent()){
-           throw new ObjectNotFoundException("Id Category not found");
-       }
-
-       return videoRepository.findByCategory(categories, pageable);
-
-    }
-
-    private void validateRequest(CategoryDto categoryDto){
-        if (StringUtils.isBlank(categoryDto.getTitle())){
+    private void validateRequest(CategoryRequest categoryRequest){
+        if (StringUtils.isBlank(categoryRequest.getTitle())){
             throw new BadRequestException("Title is empty");
-        } else if(StringUtils.isBlank(categoryDto.getColor())){
+        } else if(StringUtils.isBlank(categoryRequest.getColor())){
             throw new BadRequestException("Color is empty");
         }
     }
 
-    private Category dtoToEntity(CategoryDto categoryDto) {
-        Category category = new Category();
-        BeanUtils.copyProperties(categoryDto, category);
-        return category;
+    public Category buildCategoryRequest(CategoryRequest requestDto) {
+        return Category.builder()
+                .id(requestDto.getId())
+                .title(requestDto.getTitle())
+                .color(requestDto.getColor())
+                .build();
     }
 
-    private CategoryDto buildCategory(Category category){
-        return CategoryDto.builder()
+    public CategoryResponse buildCategoryResponse(Category category){
+        return CategoryResponse.builder()
                 .id(category.getId())
                 .title(category.getTitle())
                 .color(category.getColor())

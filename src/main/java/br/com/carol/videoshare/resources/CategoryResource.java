@@ -1,9 +1,11 @@
 package br.com.carol.videoshare.resources;
 
-import br.com.carol.videoshare.dto.CategoryDto;
+import br.com.carol.videoshare.dto.CategoryRequest;
+import br.com.carol.videoshare.dto.CategoryResponse;
+import br.com.carol.videoshare.dto.VideoResponse;
 import br.com.carol.videoshare.entities.Category;
-import br.com.carol.videoshare.entities.Video;
 import br.com.carol.videoshare.service.CategoryService;
+import br.com.carol.videoshare.service.VideoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Controller
@@ -21,34 +22,34 @@ import java.util.Optional;
 public class CategoryResource {
 
     private final CategoryService service;
+    private final VideoService videoService;
 
     @PostMapping
-    public ResponseEntity<CategoryDto> createdCategory(@RequestBody CategoryDto categoryDto) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(service.addCategory(categoryDto));
+    public ResponseEntity<CategoryResponse> createdCategory(@RequestBody CategoryRequest categoryRequest) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.addCategory(categoryRequest));
     }
 
     @GetMapping
-    public ResponseEntity<List<CategoryDto>> findAllCategory(@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
+    public ResponseEntity<List<CategoryResponse>> findAllCategory(@RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit) {
         Pageable pageReq = pageable(offset, limit);
         return ResponseEntity.status(HttpStatus.OK).body(service.findAllCategory(pageReq));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Category>> findCategoryById(@PathVariable("id") Long id) {
+    public ResponseEntity<Category> findCategoryById(@PathVariable("id") Long id) {
         return ResponseEntity.status(HttpStatus.OK).body(service.findCategoryById(id));
     }
 
     @GetMapping("/{id}/videos")
-    public ResponseEntity<?> findVideosByCategoryId(@PathVariable Long id, @RequestParam int offset, @RequestParam int limit){
+    public ResponseEntity<List<VideoResponse>> findVideosByCategoryId(@PathVariable Long id, @RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit){
         Pageable pageReq = pageable(offset, limit);
-        List<Video> videoDto = service.findVideosByCategoryId(id, pageReq);
+        List<VideoResponse> videoDto = videoService.findVideosByCategoryId(id, pageReq);
         return ResponseEntity.status(HttpStatus.OK).body(videoDto);
-
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoryDto> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryDto categoryDto) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.updateCategory(categoryDto, id));
+    @PutMapping("/{idCategory}")
+    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable("idCategory") Long idCategory, @RequestBody CategoryRequest categoryRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.updateCategory(categoryRequest, idCategory));
     }
 
     @DeleteMapping("/{id}")
