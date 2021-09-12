@@ -1,5 +1,5 @@
 servers:
-  - url: https://videos-share.herokuapp.com
+  - url: https://videos-share.herokuapp.com/
 
 spring:
   jpa:
