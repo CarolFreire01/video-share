@@ -41,15 +41,15 @@ public class CategoryResource {
     }
 
     @GetMapping("/{id}/videos")
-    public ResponseEntity<List<VideoResponse>> findVideosByCategoryId(@PathVariable Long id, @RequestParam int offset, @RequestParam int limit){
+    public ResponseEntity<List<VideoResponse>> findVideosByCategoryId(@PathVariable Long id, @RequestParam(required = false) Integer offset, @RequestParam(required = false) Integer limit){
         Pageable pageReq = pageable(offset, limit);
         List<VideoResponse> videoDto = videoService.findVideosByCategoryId(id, pageReq);
         return ResponseEntity.status(HttpStatus.OK).body(videoDto);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryRequest categoryRequest) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.updateCategory(categoryRequest, id));
+    @PutMapping("/{idCategory}")
+    public ResponseEntity<CategoryResponse> updateCategory(@PathVariable("idCategory") Long idCategory, @RequestBody CategoryRequest categoryRequest) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.updateCategory(categoryRequest, idCategory));
     }
 
     @DeleteMapping("/{id}")

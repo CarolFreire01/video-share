@@ -19,23 +19,23 @@ import java.util.stream.Collectors;
 @Service
 public class CategoryService {
 
-    private final CategoryRepository repository;
+    private final CategoryRepository categoryRepository;
 
     public CategoryResponse addCategory(CategoryRequest categoryRequest) {
         validateRequest(categoryRequest);
 
         Category category = this.buildCategoryRequest(categoryRequest);
-        Category newCategory = repository.save(category);
+        Category newCategory = categoryRepository.save(category);
 
         return buildCategoryResponse(newCategory);
     }
 
     public Category findCategoryById(Long id) {
-        return repository.findCategoryById(id);
+        return categoryRepository.findCategoryById(id);
     }
 
     public List<CategoryResponse> findAllCategory(Pageable pageable) {
-        Page<Category> findAllCategories = repository.findAll(pageable);
+        Page<Category> findAllCategories = categoryRepository.findAll(pageable);
 
         if (findAllCategories.isEmpty()){
             throw new ObjectNotFoundException("Categories not found");
@@ -46,24 +46,18 @@ public class CategoryService {
                 .collect(Collectors.toList());
     }
 
-    public CategoryResponse updateCategory(CategoryRequest categoryRequest, Long id) {
-        validateRequest(categoryRequest);
+    public CategoryResponse updateCategory(CategoryRequest categoryRequest, Long idCategory) {
+        Category existingCategory = categoryRepository.findCategoryById(idCategory);
 
-        if (repository.findById(id).isPresent()){
-            Category existingCategory = repository.findById(id).get();
+        existingCategory.updateCategory(categoryRequest);
 
-            buildCategoryResponse(existingCategory);
+        Category updatedCategory = categoryRepository.save(existingCategory);
 
-            Category updatedCategory = repository.save(existingCategory);
-
-            return buildCategoryResponse(updatedCategory);
-        } else {
-            throw new ObjectNotFoundException("Category not found");
-        }
+        return buildCategoryResponse(updatedCategory);
     }
 
     public void deleteCategory(Long id) {
-        repository.deleteById(id);
+        categoryRepository.deleteById(id);
     }
 
     private void validateRequest(CategoryRequest categoryRequest){

@@ -1,5 +1,6 @@
 package br.com.carol.videoshare.entities;
 
+import br.com.carol.videoshare.dto.VideoRequest;
 import lombok.*;
 
 import javax.persistence.*;
@@ -35,6 +36,21 @@ public class Video {
     public void addCategory(Category category) {
         this.category = category;
         this.categoryId = category.getId();
+    }
+
+    public void updateVideo(VideoRequest videoRequest) {
+
+        if (videoRequest.getTitle() != null && videoRequest.getDescription() != ""){
+            this.title = videoRequest.getTitle();
+        }
+
+        if (videoRequest.getDescription() != null && videoRequest.getDescription() != ""){
+            this.description = videoRequest.getDescription();
+        }
+
+        if (videoRequest.getUrlVideo() != null && videoRequest.getDescription() != ""){
+            this.urlVideo = videoRequest.getUrlVideo();
+        }
     }
 
 }

@@ -15,7 +15,7 @@ import java.util.List;
 @Repository
 public interface VideoRepository extends JpaRepository<Video, Long> {
 
-    @Query(nativeQuery = true, value = "SELECT * FROM videos v where v.title LIKE :title%")
+    @Query(nativeQuery = true, value = "SELECT * FROM videos v where v.title LIKE %:title%")
     Page<Video> findByTitleLike(String title, Pageable pageable);
 
     List<Video> findByCategory(Category category, Pageable pageable);

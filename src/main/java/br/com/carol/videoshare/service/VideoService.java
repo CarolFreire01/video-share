@@ -76,19 +76,13 @@ public class VideoService {
     }
 
     public VideoResponse updateVideo(VideoRequest videoRequest, Long id) {
-       validateRequest(videoRequest);
+       Video existingVideo = videoRepository.findVideoById(id);
 
-       if (videoRepository.findById(id).isPresent()){
-           Video existingVideo = videoRepository.findById(id).get();
+        existingVideo.updateVideo(videoRequest);
 
-           buildVideoResponse(existingVideo);
+        Video updatedVideo = videoRepository.save(existingVideo);
 
-           Video updatedVideo = videoRepository.save(existingVideo);
-
-           return buildVideoResponse(updatedVideo);
-       } else {
-           throw new ObjectNotFoundException("Video not found");
-       }
+        return buildVideoResponse(updatedVideo);
     }
 
     public void deleteVideo(Long id){
